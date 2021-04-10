@@ -8,12 +8,24 @@ import {
   Dimensions,
   FloatingView,
 } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 import MapView from "react-native-maps";
 import DialButton from "../../components/DialButton";
+import { FlatList } from "react-native-gesture-handler";
+
+const vehicles = [
+  {label: "car", value:200},
+  {label: "scooter", value:100},
+  {label: "walking", value:3}
+]
 
 const Home = () => {
   const [start, setStart] = useState(true);
   const [location, updateLocation] = getLocation();
+  const [carbon, updateCarbon] = useState(vehicles[0].value);
+  
+  
+  
 
   return (
     <View style={{ flex: 1 }}>
@@ -35,7 +47,19 @@ const Home = () => {
       <View style={styles.dialContainer}>
         <DialButton title="Carbon Impact" />
         <DialButton title="Distance" />
-        <DialButton title="Something" />
+        <DropDownPicker 
+          items={vehicles} 
+          defaultValue={carbon}
+          containerStyle={{width: "33.2%", height: 50}}
+          style={{backgroundColor: "black"}}
+          arrowStyle={{backgroundColor: "white"}}
+          itemStyle={{
+            justifyContent: "flex-start"
+          }}
+          dropDownStyle={{backgroundColor: "black"}}
+          globalTextStyle={{color: "white"}}
+          onChangeItem={(item) => {updateCarbon(item.value); console.log(carbon)}}
+          />
       </View>
       <View style={styles.startBttnView}>
         <TouchableOpacity
