@@ -14,10 +14,10 @@ import DialButton from "../../components/DialButton";
 import { Marker } from "react-native-maps";
 
 const vehicles = [
-  {label: "car", value:200},
-  {label: "scooter", value:100},
-  {label: "walking", value:3}
-]
+  { label: "Car", value: 200 },
+  { label: "Scooter", value: 100 },
+  { label: "Walking", value: 3 },
+];
 
 const Home = () => {
   const [start, setStart] = useState(true);
@@ -53,19 +53,22 @@ const Home = () => {
       <View style={styles.dialContainer}>
         <DialButton title="Carbon Impact" />
         <DialButton title="Distance" />
-        <DropDownPicker 
-          items={vehicles} 
+        <DropDownPicker
+          items={vehicles}
           defaultValue={carbon}
-          containerStyle={{width: "33.2%", height: 50}}
-          style={{backgroundColor: "black"}}
-          arrowStyle={{backgroundColor: "white"}}
+          containerStyle={{ width: "33.2%", height: 50 }}
+          style={{ backgroundColor: "black" }}
+          arrowStyle={{ backgroundColor: "white" }}
           itemStyle={{
-            justifyContent: "flex-start"
+            justifyContent: "flex-start",
           }}
-          dropDownStyle={{backgroundColor: "black"}}
-          globalTextStyle={{color: "white"}}
-          onChangeItem={(item) => {updateCarbon(item.value); console.log(carbon)}}
-          />
+          dropDownStyle={{ backgroundColor: "black" }}
+          globalTextStyle={{ color: "white", fontSize: 16 }}
+          onChangeItem={(item) => {
+            updateCarbon(item.value);
+            console.log(carbon);
+          }}
+        />
       </View>
       <View style={styles.startBttnView}>
         <TouchableOpacity
