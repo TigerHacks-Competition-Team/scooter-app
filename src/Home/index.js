@@ -12,6 +12,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import MapView from "react-native-maps";
 import DialButton from "../../components/DialButton";
 import { Marker } from "react-native-maps";
+import WaypointList from "../../Objects/WaypointList";
+import Waypoint from "../../Objects/Waypoint";
 
 const vehicles = [
   { label: "car", value: 200 },
@@ -23,6 +25,24 @@ const Home = () => {
   const [start, setStart] = useState(true);
   const [location] = getLocation();
   const [carbon, updateCarbon] = useState(vehicles[0].value);
+  const [waypoints, updateWayPoints] = useState([]);
+  const [distance, updateDistance] = useState(0);
+
+  React.useEffect(() => {
+    if (!start && location && location.coords) {
+      updateWayPoints((prev) => {
+        let pts = new WaypointList(prev ? prev : []);
+        pts.addWayPoint(new Waypoint(location));
+        console.log("adding waypoint");
+        return pts.waypoints;
+      });
+    }
+  }, [location, start]);
+
+  React.useEffect(() => {
+    let list = new WaypointList(waypoints);
+    updateDistance(list.calcTotalDistance());
+  }, [waypoints]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -50,11 +70,13 @@ const Home = () => {
               : null
           }
         >
-          {location && (
+          {location && location.coords && (
             <Marker
               coordinate={{
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
+                latitude:
+                  location && location.coords ? location.coords.latitude : 0,
+                longitude:
+                  location && location.coords ? location.coords.longitude : 0,
               }}
             />
           )}
@@ -62,7 +84,7 @@ const Home = () => {
       </View>
       <View style={styles.dialContainer}>
         <DialButton title="Carbon Impact" />
-        <DialButton title="Distance" />
+        <Text>{Math.round(distance * 100) / 100}</Text>
         <DropDownPicker
           items={vehicles}
           defaultValue={carbon}
