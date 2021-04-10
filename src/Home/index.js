@@ -16,9 +16,9 @@ import WaypointList from "../../Objects/WaypointList";
 import Waypoint from "../../Objects/Waypoint";
 
 const vehicles = [
-  { label: "car", value: 200 },
-  { label: "scooter", value: 100 },
-  { label: "walking", value: 3 },
+  { label: "Car", value: 200 },
+  { label: "Scooter", value: 100 },
+  { label: "Walking", value: 3 },
 ];
 
 const Home = () => {
@@ -95,7 +95,7 @@ const Home = () => {
             justifyContent: "flex-start",
           }}
           dropDownStyle={{ backgroundColor: "black" }}
-          globalTextStyle={{ color: "white" }}
+          globalTextStyle={{ color: "white", fontSize: 16 }}
           onChangeItem={(item) => {
             updateCarbon(item.value);
             console.log(carbon);
