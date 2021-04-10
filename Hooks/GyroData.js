@@ -1,16 +1,14 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DeviceMotion } from "expo-sensors";
 
 export default () => {
-  const [gyroData, setGyroData] = React.useState([]);
+  const [gyroData, setGyroData] = useState([]);
   useEffect(() => {
     subscription = DeviceMotion.addListener((gyroData) => {
       setGyroData(gyroData);
     });
     return () => {
-      DeviceMotion.removeAllListeners();
-      DeviceMotion.removeSubscription();
+      subscription.remove();
     };
   }, []);
 
