@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 const DialButton = ({ title }) => {
   return (
     <TouchableOpacity style={styles.buttonBox}>
-      <Text style={{ color: "white" }}>{title}</Text>
+      <Text style={{ color: "white", fontSize: 16 }}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -22,5 +22,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     borderRadius: 4,
+    paddingHorizontal: 10,
   },
 });
