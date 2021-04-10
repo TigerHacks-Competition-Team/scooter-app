@@ -23,8 +23,9 @@ const Home = () => {
         <DialButton title="Distance" />
         <DialButton title="Something" />
       </View>
-      <View style={styles.startBttn}>
+      <View style={styles.startBttnView}>
         <TouchableOpacity
+          activeOpacity={0.8}
           style={styles.buttonBox}
           onPress={() => setStart(!start)}
         >
@@ -40,39 +41,31 @@ export default Home;
 const styles = StyleSheet.create({
   dialContainer: {
     position: "absolute",
-    bottom: 100,
+    bottom: 95,
     zIndex: 10,
     flex: 1,
     flexDirection: "row",
     marginHorizontal: 10,
     alignItems: "flex-end",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: 5,
   },
   buttonBox: {
     width: 120,
-    height: 55,
-    left: Dimensions.get("window").width / 2 - 60,
+    height: 50,
     backgroundColor: "blue",
     alignItems: "center",
     justifyContent: "space-around",
-    borderRadius: 2,
-    borderWidth: 1,
-    borderColor: "black",
     borderRadius: 10,
   },
   buttonFont: {
     color: "white",
     fontSize: 20,
   },
-  startBttn: {
+  startBttnView: {
     position: "absolute",
     bottom: "5%",
-    zIndex: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
+    left: Dimensions.get("window").width / 2 - 60,
   },
   map: {
     width: Dimensions.get("window").width,

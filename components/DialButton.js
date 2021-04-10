@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 const DialButton = ({ title }) => {
   return (
-    <TouchableOpacity style={styles.buttonBox}>
+    <TouchableOpacity style={styles.buttonBox} activeOpacity={0.8}>
       <Text style={{ color: "white", fontSize: 16 }}>{title}</Text>
     </TouchableOpacity>
   );
