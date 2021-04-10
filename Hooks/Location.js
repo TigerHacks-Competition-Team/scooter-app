@@ -7,7 +7,7 @@ export default () => {
 
   useEffect(() => {
     let subscription = Location.watchPositionAsync(
-      { accuracy: Location.Accuracy.High, timeInterval: 10000, distanceInterval:1 },
+      { accuracy: Location.Accuracy.High, timeInterval: 10000, distanceInterval:0 },
       (loc) => {
         console.log(loc.coords.latitude)
         setLocation(loc)
