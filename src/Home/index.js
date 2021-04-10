@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import MapView from "react-native-maps";
 import DialButton from "../../components/DialButton";
+import { Marker } from "react-native-maps";
 
 const Home = () => {
   const [start, setStart] = useState(true);
@@ -30,7 +31,16 @@ const Home = () => {
                 }
               : null
           }
-        />
+        >
+          {location && (
+            <Marker
+              coordinate={{
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              }}
+            />
+          )}
+        </MapView>
       </View>
       <View style={styles.dialContainer}>
         <DialButton title="Carbon Impact" />
