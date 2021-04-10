@@ -1,20 +1,11 @@
 class Waypoint {
   constructor(data) {
-    this.long = data.long;
-    this.lat = data.lat;
+    this.long = data.coords.longitude;
+    this.lat = data.coords.latitude;
     this.zRot = data.zRot;
     this.xRot = data.xRot;
     this.yRot = data.yRot;
     this.time = data.time;
-  }
-
-  constructor(long, lat, zRot, xRot, yRot, time) {
-    this.long = long;
-    this.lat = lat;
-    this.zRot = zRot;
-    this.xRot = xRot;
-    this.yRot = yRot;
-    this.time = time;
   }
 
   /**
@@ -35,11 +26,11 @@ class Waypoint {
     // Credit: cietus and Federico klez Culloca on StackOverflow https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates
     var earthRadiusKm = 6371;
 
-    var dLat = degreesToRadians(waypoint2.lat - this.lat);
-    var dLon = degreesToRadians(waypoint2.long - this.long);
+    var dLat = this.degreesToRadians(waypoint2.lat - this.lat);
+    var dLon = this.degreesToRadians(waypoint2.long - this.long);
 
-    let lat1 = degreesToRadians(this.lat);
-    let lat2 = degreesToRadians(waypoint2.lat);
+    let lat1 = this.degreesToRadians(this.lat);
+    let lat2 = this.degreesToRadians(waypoint2.lat);
 
     var a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +

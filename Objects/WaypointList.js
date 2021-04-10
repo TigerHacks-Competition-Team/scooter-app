@@ -1,6 +1,6 @@
 class WaypointList {
   constructor(waypoints) {
-    this.waypoints = waypoints;
+    this.waypoints = waypoints ? waypoints : [];
   }
 
   /**
@@ -8,6 +8,7 @@ class WaypointList {
    * @param {waypoint object} waypoint
    */
   addWayPoint(waypoint) {
+    console.log("waypoints: " + JSON.stringify(this.waypoints));
     this.waypoints.push(waypoint);
   }
 
@@ -42,3 +43,5 @@ class WaypointList {
     return distance / hours;
   }
 }
+
+export default WaypointList;
