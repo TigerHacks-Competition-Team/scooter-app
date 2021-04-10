@@ -11,6 +11,7 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import MapView from "react-native-maps";
 import DialButton from "../../components/DialButton";
+<<<<<<< HEAD
 import { FlatList } from "react-native-gesture-handler";
 
 const vehicles = [
@@ -26,6 +27,13 @@ const Home = () => {
   
   
   
+=======
+import { Marker } from "react-native-maps";
+
+const Home = () => {
+  const [start, setStart] = useState(true);
+  const [location] = getLocation();
+>>>>>>> 7a45fe9d8e577e188a0e4a0ac088c2eb4511bbee
 
   return (
     <View style={{ flex: 1 }}>
@@ -42,7 +50,16 @@ const Home = () => {
                 }
               : null
           }
-        />
+        >
+          {location && (
+            <Marker
+              coordinate={{
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              }}
+            />
+          )}
+        </MapView>
       </View>
       <View style={styles.dialContainer}>
         <DialButton title="Carbon Impact" />
