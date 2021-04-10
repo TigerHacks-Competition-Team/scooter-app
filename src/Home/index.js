@@ -11,8 +11,7 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import MapView from "react-native-maps";
 import DialButton from "../../components/DialButton";
-<<<<<<< HEAD
-import { FlatList } from "react-native-gesture-handler";
+import { Marker } from "react-native-maps";
 
 const vehicles = [
   {label: "car", value:200},
@@ -22,18 +21,8 @@ const vehicles = [
 
 const Home = () => {
   const [start, setStart] = useState(true);
-  const [location, updateLocation] = getLocation();
-  const [carbon, updateCarbon] = useState(vehicles[0].value);
-  
-  
-  
-=======
-import { Marker } from "react-native-maps";
-
-const Home = () => {
-  const [start, setStart] = useState(true);
   const [location] = getLocation();
->>>>>>> 7a45fe9d8e577e188a0e4a0ac088c2eb4511bbee
+  const [carbon, updateCarbon] = useState(vehicles[0].value);
 
   return (
     <View style={{ flex: 1 }}>
