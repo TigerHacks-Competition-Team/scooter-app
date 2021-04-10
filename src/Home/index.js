@@ -39,6 +39,16 @@ const Home = () => {
                 }
               : null
           }
+          region={
+            location && location.coords
+              ? {
+                  latitude: location.coords.latitude,
+                  longitude: location.coords.longitude,
+                  latitudeDelta: 0.00922,
+                  longitudeDelta: 0.00421,
+                }
+              : null
+          }
         >
           {location && (
             <Marker
