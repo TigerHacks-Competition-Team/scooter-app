@@ -4,18 +4,19 @@ import * as Location from "expo-location";
 export default () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [result, setResult] = useState("Waiting");
+  const [result, setResult] = useState(null);
 
   useEffect(() => {
     updateLocation();
   }, []);
 
   useEffect(() => {
-    setResult(JSON.stringify(location));
+    setResult(location);
   }, [location]);
 
   useEffect(() => {
-    setResult(errorMsg);
+    console.log(errorMsg)
+    setResult(null);
   }, [errorMsg]);
 
   const updateLocation = async () => {
@@ -29,7 +30,6 @@ export default () => {
     let location = await Location.getCurrentPositionAsync({});
     console.log("3")
     setLocation(location);
-    setResult();
   };
 
   return [result, updateLocation];

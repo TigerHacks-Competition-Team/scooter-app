@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getLocation } from "../../Hooks/index";
 import {
   View,
   Text,
@@ -12,11 +13,24 @@ import DialButton from "../../components/DialButton";
 
 const Home = () => {
   const [start, setStart] = useState(true);
+  const [location, updateLocation] = getLocation();
 
   return (
     <View style={{ flex: 1 }}>
       <View>
-        <MapView style={styles.map} />
+        <MapView
+          style={styles.map}
+          initialRegion={
+            location && location.coords
+              ? {
+                  latitude: location.coords.latitude,
+                  longitude: location.coords.longitude,
+                  latitudeDelta: 0.00922,
+                  longitudeDelta: 0.00421,
+                }
+              : null
+          }
+        />
       </View>
       <View style={styles.dialContainer}>
         <DialButton title="Carbon Impact" />
