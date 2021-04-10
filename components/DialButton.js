@@ -13,7 +13,7 @@ export default DialButton;
 
 const styles = StyleSheet.create({
   buttonBox: {
-    flex: 1,
+    width: "33.2%",
     height: 50,
     backgroundColor: "black",
     alignItems: "center",
