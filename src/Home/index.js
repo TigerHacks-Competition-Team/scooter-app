@@ -14,10 +14,10 @@ import DialButton from "../../components/DialButton";
 import { Marker } from "react-native-maps";
 
 const vehicles = [
-  {label: "car", value:200},
-  {label: "scooter", value:100},
-  {label: "walking", value:3}
-]
+  { label: "car", value: 200 },
+  { label: "scooter", value: 100 },
+  { label: "walking", value: 3 },
+];
 
 const Home = () => {
   const [start, setStart] = useState(true);
@@ -30,6 +30,16 @@ const Home = () => {
         <MapView
           style={styles.map}
           initialRegion={
+            location && location.coords
+              ? {
+                  latitude: location.coords.latitude,
+                  longitude: location.coords.longitude,
+                  latitudeDelta: 0.00922,
+                  longitudeDelta: 0.00421,
+                }
+              : null
+          }
+          region={
             location && location.coords
               ? {
                   latitude: location.coords.latitude,
@@ -53,19 +63,22 @@ const Home = () => {
       <View style={styles.dialContainer}>
         <DialButton title="Carbon Impact" />
         <DialButton title="Distance" />
-        <DropDownPicker 
-          items={vehicles} 
+        <DropDownPicker
+          items={vehicles}
           defaultValue={carbon}
-          containerStyle={{width: "33.2%", height: 50}}
-          style={{backgroundColor: "black"}}
-          arrowStyle={{backgroundColor: "white"}}
+          containerStyle={{ width: "33.2%", height: 50 }}
+          style={{ backgroundColor: "black" }}
+          arrowStyle={{ backgroundColor: "white" }}
           itemStyle={{
-            justifyContent: "flex-start"
+            justifyContent: "flex-start",
           }}
-          dropDownStyle={{backgroundColor: "black"}}
-          globalTextStyle={{color: "white"}}
-          onChangeItem={(item) => {updateCarbon(item.value); console.log(carbon)}}
-          />
+          dropDownStyle={{ backgroundColor: "black" }}
+          globalTextStyle={{ color: "white" }}
+          onChangeItem={(item) => {
+            updateCarbon(item.value);
+            console.log(carbon);
+          }}
+        />
       </View>
       <View style={styles.startBttnView}>
         <TouchableOpacity
