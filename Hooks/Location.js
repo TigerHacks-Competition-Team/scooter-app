@@ -3,35 +3,21 @@ import * as Location from "expo-location";
 
 export default () => {
   const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [result, setResult] = useState("Waiting");
+  const [result, setResult] = useState(null);
 
   useEffect(() => {
-    updateLocation();
+    let subscription = Location.watchPositionAsync(
+      { accuracy: Location.Accuracy.High, timeInterval: 10000, distanceInterval:0 },
+      (loc) => {
+        console.log(loc.coords.latitude)
+        setLocation(loc)
+      }
+    )
   }, []);
 
   useEffect(() => {
-    setResult(JSON.stringify(location));
+    setResult(location);
   }, [location]);
 
-  useEffect(() => {
-    setResult(errorMsg);
-  }, [errorMsg]);
-
-  const updateLocation = async () => {
-    console.log("1");
-    let { status } = await Location.requestPermissionsAsync();
-    if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
-      return;
-    }
-    console.log("2");
-    let location = await Location.getCurrentPositionAsync({});
-    Location.getCurrentPositionAsync();
-    console.log("3");
-    setLocation(location);
-    setResult();
-  };
-
-  return [result, updateLocation];
+  return [result];
 };
