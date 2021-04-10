@@ -8,6 +8,15 @@ class Waypoint {
     this.time = data.time;
   }
 
+  constructor(long, lat, zRot, xRot, yRot, time) {
+    this.long = long;
+    this.lat = lat;
+    this.zRot = zRot;
+    this.xRot = xRot;
+    this.yRot = yRot;
+    this.time = time;
+  }
+
   /**
    *
    * @param {number} degrees angle in degrees
