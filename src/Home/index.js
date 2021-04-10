@@ -14,7 +14,7 @@ import { Marker } from "react-native-maps";
 
 const Home = () => {
   const [start, setStart] = useState(true);
-  const [location, updateLocation] = getLocation();
+  const [location] = getLocation();
 
   return (
     <View style={{ flex: 1 }}>
