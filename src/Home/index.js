@@ -31,6 +31,7 @@ const Home = () => {
   const [speed, updateSpeed] = useState(0);
   const [carbonEmit, updateCarbonEmit] = useState(0);
   const [startTime, setStartTime] = useState(0);
+  const [secs, setSecs] = useState(0);
 
   React.useEffect(() => {
     if (!start && location && location.coords) {
@@ -42,6 +43,18 @@ const Home = () => {
       });
     }
   }, [location, start]);
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!start) {
+        setSecs(secs + 1)
+      }
+    }, 1000);
+    
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [secs, start]);
 
   React.useEffect(() => {
     if (!start) {
@@ -70,6 +83,20 @@ const Home = () => {
       updateCarbonEmit(0);
     }
   }, [waypoints, carbon]);
+
+  const pad = (num) => (
+    num < 10 ? "0" + num : num
+  )
+
+  const formatTime = (totalSeconds) => {
+    const hours = pad(Math.floor(totalSeconds / 3600))
+    const minutes = pad(Math.floor(totalSeconds / 60))
+    const seconds = pad(totalSeconds % 60)
+    if (totalSeconds >= 3600) {
+      return `${hours}:${minutes}:${seconds}`
+    }
+    return `  ${minutes}:${seconds}`
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: "red" }}>
@@ -154,6 +181,9 @@ const Home = () => {
           console.log(carbon);
         }}
       />
+      <View style={styles.clockView}>
+        <Text style={{ color: "white" }}>{formatTime(secs)}</Text>
+      </View>
       <View style={styles.dialContainer}>
         <DialButton
           title={Math.round(carbonEmit * 100) / 100 + " grams"}
