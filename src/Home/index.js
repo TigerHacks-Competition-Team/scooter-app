@@ -99,7 +99,7 @@ const Home = () => {
           position: "absolute",
           top: 40,
           right: -270,
-          width: 110,
+          width: 130,
         }}
         arrowStyle={{ backgroundColor: "white" }}
         itemStyle={{
@@ -109,7 +109,7 @@ const Home = () => {
           backgroundColor: "black",
           position: "absolute",
           right: -270,
-          width: 110,
+          width: 130,
         }}
         globalTextStyle={{ color: "white", fontSize: 16 }}
         onChangeItem={(item) => {
