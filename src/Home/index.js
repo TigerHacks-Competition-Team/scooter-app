@@ -196,7 +196,16 @@ const Home = () => {
         }}
       />
       <View style={styles.clockView}>
-        <Text style={{ color: "white", fontSize: 24 }}>{formatTime(secs)}</Text>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 24,
+            position: "relative",
+            left: "-5%",
+          }}
+        >
+          {formatTime(secs)}
+        </Text>
       </View>
       <View style={styles.dialContainer}>
         <DialButton
@@ -290,14 +299,12 @@ const styles = StyleSheet.create({
   },
   clockView: {
     position: "absolute",
-    width: 65,
     borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
     borderColor: "white",
+    justifyContent: "center",
     borderWidth: 1,
     bottom: 95,
-    height: 30,
+    height: 40,
     left: Dimensions.get("window").width * (1 / 6) - 40,
   },
   historyView: {
