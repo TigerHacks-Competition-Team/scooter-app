@@ -35,6 +35,7 @@ const Home = () => {
   const [startTime, setStartTime] = useState(0);
   const [routes, setRoutes] = useState([]);
   const [secs, setSecs] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
 
   React.useEffect(() => {
     if (!start && location && location.coords) {
@@ -215,12 +216,42 @@ const Home = () => {
           left: Dimensions.get("window").width * (5 / 6) - 20,
           width: 125,
         }}
-        onPress={() => {}}
+        onPress={() => {
+          setModalVisible(!modalVisible);
+        }}
       >
         <MaterialIcons name="history" size={50} color="white" />
       </TouchableOpacity>
-      <Modal visible={false}>
-        <Text>{JSON.stringify(routes)}</Text>
+      <Modal visible={modalVisible} transparent={true}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <View
+            style={{
+              width: "90%",
+              height: "90%",
+              backgroundColor: "white",
+              borderRadius: 10,
+            }}
+          >
+            <Text>{JSON.stringify(routes)}</Text>
+            <View
+              style={{ flex: 1, justifyContent: "flex-end", marginLeft: 10 }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(false);
+                }}
+              >
+                <MaterialIcons
+                  name="keyboard-backspace"
+                  size={60}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       </Modal>
     </View>
   );
