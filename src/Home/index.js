@@ -107,7 +107,7 @@ const Home = () => {
     const minutes = pad(Math.floor(totalSeconds / 60));
     const seconds = pad(totalSeconds % 60);
     if (totalSeconds >= 3600) {
-      return `${hours}:${minutes}:${seconds}`;
+      return `${hours}:${minutes}`;
     }
     return `  ${minutes}:${seconds}`;
   };
