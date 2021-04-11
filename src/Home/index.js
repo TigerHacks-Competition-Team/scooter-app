@@ -10,7 +10,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import MapView, { Polyline } from "react-native-maps";
+import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import DialButton from "../../components/DialButton";
 import { Marker } from "react-native-maps";
 import WaypointList from "../../Objects/WaypointList";
@@ -74,7 +74,9 @@ const Home = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "red" }}>
       <MapView
+        provider={PROVIDER_GOOGLE}
         style={StyleSheet.absoluteFill}
+        customMapStyle={customMapStyles}
         initialRegion={
           location && location.coords
             ? {
@@ -116,23 +118,35 @@ const Home = () => {
       <DropDownPicker
         items={vehicles}
         defaultValue={carbon}
-        containerStyle={{ width: "33.2%", height: 50 }}
+        searchable
+        containerStyle={{ width: "50%", height: 50 }}
         style={{
           backgroundColor: "black",
           position: "absolute",
           top: 40,
-          right: -270,
-          width: 130,
+          right:
+            -(
+              Dimensions.get("window").width -
+              Dimensions.get("window").width / 2
+            ) / 2,
+          width: "100%",
+          border: "none",
         }}
-        arrowStyle={{ backgroundColor: "white" }}
+        arrowStyle={{ arrowColor: "white" }}
+        arrowColor="white"
         itemStyle={{
           justifyContent: "flex-start",
         }}
         dropDownStyle={{
           backgroundColor: "black",
-          position: "absolute",
-          right: -270,
-          width: 130,
+          right:
+            -(
+              Dimensions.get("window").width -
+              Dimensions.get("window").width / 2
+            ) / 2,
+          width: "100%",
+          marginTop: 40,
+          border: "none",
         }}
         globalTextStyle={{ color: "white", fontSize: 16 }}
         onChangeItem={(item) => {
@@ -141,7 +155,10 @@ const Home = () => {
         }}
       />
       <View style={styles.dialContainer}>
-        <DialButton title={Math.round(carbonEmit * 100) / 100 + " grams"} />
+        <DialButton
+          title={Math.round(carbonEmit * 100) / 100 + " grams"}
+          style={{ border: "none", outline: "none" }}
+        />
         <DialButton title={Math.round(distance * 100) / 100 + " miles"} />
         <DialButton title={Math.round(speed * 100) / 100 + " mph"} />
       </View>
@@ -166,7 +183,7 @@ const styles = StyleSheet.create({
     bottom: 10,
     height: 200,
     flexDirection: "row",
-    marginLeft: 1.5,
+    margin: 8,
   },
   startBttnView: {
     position: "absolute",
@@ -186,3 +203,245 @@ const styles = StyleSheet.create({
     left: 16,
   },
 });
+
+const customMapStyles = [
+  {
+    stylers: [
+      {
+        visibility: "on",
+      },
+    ],
+  },
+  {
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#212121",
+      },
+    ],
+  },
+  {
+    elementType: "labels.icon",
+    stylers: [
+      {
+        visibility: "off",
+      },
+    ],
+  },
+  {
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#757575",
+      },
+    ],
+  },
+  {
+    elementType: "labels.text.stroke",
+    stylers: [
+      {
+        color: "#212121",
+      },
+    ],
+  },
+  {
+    featureType: "administrative",
+    stylers: [
+      {
+        visibility: "on",
+      },
+    ],
+  },
+  {
+    featureType: "administrative",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#757575",
+      },
+    ],
+  },
+  {
+    featureType: "administrative.country",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#9e9e9e",
+      },
+    ],
+  },
+  {
+    featureType: "administrative.land_parcel",
+    stylers: [
+      {
+        visibility: "off",
+      },
+    ],
+  },
+  {
+    featureType: "administrative.locality",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#bdbdbd",
+      },
+    ],
+  },
+  {
+    featureType: "landscape",
+    stylers: [
+      {
+        visibility: "on",
+      },
+    ],
+  },
+  {
+    featureType: "landscape.man_made",
+    stylers: [
+      {
+        visibility: "on",
+      },
+    ],
+  },
+  {
+    featureType: "poi",
+    stylers: [
+      {
+        visibility: "on",
+      },
+    ],
+  },
+  {
+    featureType: "poi",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#757575",
+      },
+    ],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#181818",
+      },
+    ],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#616161",
+      },
+    ],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "labels.text.stroke",
+    stylers: [
+      {
+        color: "#1b1b1b",
+      },
+    ],
+  },
+  {
+    featureType: "road",
+    stylers: [
+      {
+        visibility: "on",
+      },
+    ],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#2c2c2c",
+      },
+    ],
+  },
+  {
+    featureType: "road",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#8a8a8a",
+      },
+    ],
+  },
+  {
+    featureType: "road.arterial",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#373737",
+      },
+    ],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#3c3c3c",
+      },
+    ],
+  },
+  {
+    featureType: "road.highway.controlled_access",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#4e4e4e",
+      },
+    ],
+  },
+  {
+    featureType: "road.local",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#616161",
+      },
+    ],
+  },
+  {
+    featureType: "transit",
+    stylers: [
+      {
+        visibility: "on",
+      },
+    ],
+  },
+  {
+    featureType: "transit",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#757575",
+      },
+    ],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#000000",
+      },
+    ],
+  },
+  {
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#3d3d3d",
+      },
+    ],
+  },
+];

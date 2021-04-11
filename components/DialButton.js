@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 
 const DialButton = ({ title }) => {
   return (
@@ -13,7 +19,9 @@ export default DialButton;
 
 const styles = StyleSheet.create({
   buttonBox: {
-    width: "33.2%",
+    width: Dimensions.get("window").width / 3 - 16 - 6,
+    flexGrow: 1,
+    flexShrink: 0,
     height: 50,
     backgroundColor: "black",
     alignItems: "center",
@@ -22,5 +30,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "white",
     borderRadius: 4,
+    margin: 8,
   },
 });
