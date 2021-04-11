@@ -17,6 +17,7 @@ import { Marker } from "react-native-maps";
 import WaypointList from "../../Objects/WaypointList";
 import Waypoint from "../../Objects/Waypoint";
 import { MaterialIcons } from "@expo/vector-icons";
+import { FlatList } from "react-native-gesture-handler";
 
 const vehicles = [
   { label: "Car", value: 204 },
@@ -239,10 +240,23 @@ const Home = () => {
               borderRadius: 10,
             }}
           >
-            <Text>{JSON.stringify(routes)}</Text>
             <View
-              style={{ flex: 1, justifyContent: "flex-end", marginLeft: 10 }}
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 10,
+              }}
             >
+              <Text style={{ fontSize: 24 }}>Past Routes</Text>
+            </View>
+            <View style={{ flex: 1, marginTop: 20, marginLeft: 20 }}>
+              <FlatList
+                data={routes}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => <Text>{JSON.stringify(item)}</Text>}
+              />
+            </View>
+            <View style={{ justifyContent: "flex-end", marginLeft: 10 }}>
               <TouchableOpacity
                 onPress={() => {
                   setModalVisible(false);
