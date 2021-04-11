@@ -15,6 +15,7 @@ import DialButton from "../../components/DialButton";
 import { Marker } from "react-native-maps";
 import WaypointList from "../../Objects/WaypointList";
 import Waypoint from "../../Objects/Waypoint";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const vehicles = [
   { label: "Car", value: 200 },
@@ -47,13 +48,13 @@ const Home = () => {
   React.useEffect(() => {
     const timeout = setTimeout(() => {
       if (!start) {
-        setSecs(secs + 1)
+        setSecs(secs + 1);
       }
     }, 1000);
-    
+
     return () => {
-      clearTimeout(timeout)
-    }
+      clearTimeout(timeout);
+    };
   }, [secs, start]);
 
   React.useEffect(() => {
@@ -84,19 +85,17 @@ const Home = () => {
     }
   }, [waypoints, carbon]);
 
-  const pad = (num) => (
-    num < 10 ? "0" + num : num
-  )
+  const pad = (num) => (num < 10 ? "0" + num : num);
 
   const formatTime = (totalSeconds) => {
-    const hours = pad(Math.floor(totalSeconds / 3600))
-    const minutes = pad(Math.floor(totalSeconds / 60))
-    const seconds = pad(totalSeconds % 60)
+    const hours = pad(Math.floor(totalSeconds / 3600));
+    const minutes = pad(Math.floor(totalSeconds / 60));
+    const seconds = pad(totalSeconds % 60);
     if (totalSeconds >= 3600) {
-      return `${hours}:${minutes}:${seconds}`
+      return `${hours}:${minutes}:${seconds}`;
     }
-    return `  ${minutes}:${seconds}`
-  }
+    return `  ${minutes}:${seconds}`;
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "red" }}>
@@ -200,6 +199,18 @@ const Home = () => {
         <Text style={{ color: "white", fontSize: 20 }}>
           {start ? "Start" : "Stop"}
         </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.4}
+        style={{
+          position: "absolute",
+          bottom: 90,
+          left: Dimensions.get("window").width * (5 / 6) - 20,
+          width: 125,
+        }}
+        onPress={() => {}}
+      >
+        <MaterialIcons name="history" size={50} color="white" />
       </TouchableOpacity>
     </View>
   );
