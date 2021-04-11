@@ -20,8 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 2,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "white",
     borderRadius: 4,
-    paddingHorizontal: 10,
   },
 });

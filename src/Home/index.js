@@ -79,62 +79,58 @@ const Home = () => {
               }
             : null
         }
+      />
+      {location && location.coords && (
+        <Marker
+          coordinate={{
+            latitude:
+              location && location.coords ? location.coords.latitude : 0,
+            longitude:
+              location && location.coords ? location.coords.longitude : 0,
+          }}
+        />
+      )}
+      <DropDownPicker
+        items={vehicles}
+        defaultValue={carbon}
+        containerStyle={{ width: "33.2%", height: 50 }}
+        style={{
+          backgroundColor: "black",
+          position: "absolute",
+          top: 40,
+          right: -270,
+          width: 110,
+        }}
+        arrowStyle={{ backgroundColor: "white" }}
+        itemStyle={{
+          justifyContent: "flex-start",
+        }}
+        dropDownStyle={{
+          backgroundColor: "black",
+          position: "absolute",
+          right: -270,
+          width: 110,
+        }}
+        globalTextStyle={{ color: "white", fontSize: 16 }}
+        onChangeItem={(item) => {
+          updateCarbon(item.value);
+          console.log(carbon);
+        }}
+      />
+      <View style={styles.dialContainer}>
+        <DialButton title="Carbon Impact" />
+        <DialButton title={"Distance: " + Math.round(distance * 100) / 100} />
+        <DialButton title={"Speed: " + Math.round(speed * 100) / 100} />
+      </View>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        style={styles.startBttnView}
+        onPress={() => setStart((prev) => !prev)}
       >
-        {location && location.coords && (
-          <Marker
-            coordinate={{
-              latitude:
-                location && location.coords ? location.coords.latitude : 0,
-              longitude:
-                location && location.coords ? location.coords.longitude : 0,
-            }}
-          />
-        )}
-        <SafeAreaView style={{ flex: 1 }}>
-          <View style={styles.contentView}>
-            <View style={styles.bottomView}>
-              <DropDownPicker
-                items={vehicles}
-                defaultValue={carbon}
-                containerStyle={{ width: "33.2%", height: 50 }}
-                style={{ backgroundColor: "black" }}
-                arrowStyle={{ backgroundColor: "white" }}
-                itemStyle={{
-                  justifyContent: "flex-start",
-                }}
-                dropDownStyle={{ backgroundColor: "black" }}
-                globalTextStyle={{ color: "white", fontSize: 16 }}
-                onChangeItem={(item) => {
-                  updateCarbon(item.value);
-                  console.log(carbon);
-                }}
-              />
-              <View style={styles.dialContainer}>
-                <DialButton title="Carbon Impact" />
-                <DialButton
-                  title={"Distance: " + Math.round(distance * 100) / 100}
-                  value={distance}
-                />
-                <DialButton
-                  title={"Speed: " + Math.round(speed * 100) / 100}
-                  value={speed}
-                />
-              </View>
-              <View style={styles.startBttnView}>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  style={styles.buttonBox}
-                  onPress={() => setStart((prev) => !prev)}
-                >
-                  <Text style={styles.buttonFont}>
-                    {start ? "Start" : "Stop"}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </SafeAreaView>
-      </MapView>
+        <Text style={{ color: "white", fontSize: 20 }}>
+          {start ? "Start" : "Stop"}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -142,34 +138,22 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
-  dialContainer: { flexDirection: "row" },
-  buttonBox: {
-    padding: 16,
-    paddingLeft: 32,
-    paddingRight: 32,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
+  dialContainer: {
+    position: "absolute",
+    bottom: 10,
+    height: 200,
+    flexDirection: "row",
+    marginLeft: 1.5,
+  },
+  startBttnView: {
+    position: "absolute",
+    bottom: 80,
+    left: Dimensions.get("window").width / 2 - 125 / 2,
+    width: 125,
+    height: 60,
     backgroundColor: "blue",
-    marginTop: 8,
-  },
-  buttonFont: {
-    color: "white",
-    fontSize: 20,
-  },
-  startBttnView: {},
-  contentView: {
-    flex: 1,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-  },
-  bottomView: {
-    justifyContent: "center",
-    width: "100%",
-    alignItems: "center",
-    position: "absolute", //Here is the trick
-    bottom: 0, //Here is the trick
-    backgroundColor: "blue",
-    //alignItems: "flex-end",
   },
 });
