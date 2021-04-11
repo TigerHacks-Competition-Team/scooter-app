@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   Modal,
   Keyboard,
+  FlatList,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
@@ -17,7 +18,7 @@ import DialButton from "../../components/DialButton";
 import { Marker } from "react-native-maps";
 import WaypointList from "../../Objects/WaypointList";
 import Waypoint from "../../Objects/Waypoint";
-import { FlatList } from "react-native-gesture-handler";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const vehicles = [
   { label: "Car", value: 200 },
@@ -36,6 +37,7 @@ const Home = () => {
   const [startTime, setStartTime] = useState(0);
   const [routes, setRoutes] = useState([]);
   const [secs, setSecs] = useState(0);
+  const [vis, setVis] = useState(false);
 
   React.useEffect(() => {
     if (!start && location && location.coords) {
@@ -209,20 +211,34 @@ const Home = () => {
           {start ? "Start" : "Stop"}
         </Text>
       </TouchableOpacity>
-      <Modal visible>
+      <Modal visible={vis}>
         <SafeAreaView>
           <FlatList
             data={routes.filter((item) => item.waypoints.length > 0)}
-            renderItem={renderItem}
+            renderItem={({ item }) => <RenderItem item={item} />}
             keyExtractor={(item, idx) => idx}
           />
         </SafeAreaView>
       </Modal>
+      <TouchableOpacity
+        activeOpacity={0.4}
+        style={{
+          position: "absolute",
+          bottom: 90,
+          left: Dimensions.get("window").width * (5 / 6) - 20,
+          width: 125,
+        }}
+        onPress={() => {
+          setVis(true);
+        }}
+      >
+        <MaterialIcons name="history" size={50} color="white" />
+      </TouchableOpacity>
     </View>
   );
 };
 
-const renderItem = ({ item }) => {
+const RenderItem = ({ item }) => {
   return (
     <View>
       <Text>{item.waypoints.length}</Text>
