@@ -19,9 +19,14 @@ import Waypoint from "../../Objects/Waypoint";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const vehicles = [
-  { label: "Car", value: 200 },
-  { label: "Scooter", value: 100 },
-  { label: "Walking", value: 3 },
+  { label: "Car", value: 204 },
+  { label: "eScooter", value: 124 },
+  { label: "Motorcycle", value: 86 },
+  { label: "Electric Car", value: 78 },
+  { label: "Average Bus", value: 180 },
+  { label: "Full Bus", value: 51 },
+  { label: "Bike", value: 0 },
+  { label: "Walking", value: 0 },
 ];
 
 const Home = () => {
