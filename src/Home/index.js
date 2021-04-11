@@ -21,9 +21,15 @@ import Waypoint from "../../Objects/Waypoint";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const vehicles = [
-  { label: "Car", value: 200 },
-  { label: "Scooter", value: 100 },
-  { label: "Walking", value: 3 },
+  { label: "Car", value: 204 },
+  { label: "Rental eScooter", value: 124 },
+  { label: "Electric Skateboard", value: 3 },
+  { label: "Motorcycle", value: 86 },
+  { label: "Electric Car", value: 78 },
+  { label: "Average Bus", value: 180 },
+  { label: "Full Bus", value: 51 },
+  { label: "Bike", value: 0 },
+  { label: "Walking", value: 0 },
 ];
 
 const Home = () => {
@@ -37,7 +43,11 @@ const Home = () => {
   const [startTime, setStartTime] = useState(0);
   const [routes, setRoutes] = useState([]);
   const [secs, setSecs] = useState(0);
-  const [vis, setVis] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  React.useEffect(() => {
+    getLists();
+  }, []);
 
   React.useEffect(() => {
     if (!start && location && location.coords) {
@@ -93,6 +103,12 @@ const Home = () => {
 
   const getLists = async () => {
     let lists = await WaypointList.getAllLists();
+    for (let i = 0; i < lists.length; i++) {
+      lists[i].waypoints = lists[i].waypoints.map(
+        (point) => new Waypoint(point)
+      );
+    }
+    console.log("loading waypoints");
     setRoutes(lists);
   };
   const pad = (num) => (num < 10 ? "0" + num : num);
@@ -102,7 +118,7 @@ const Home = () => {
     const minutes = pad(Math.floor(totalSeconds / 60));
     const seconds = pad(totalSeconds % 60);
     if (totalSeconds >= 3600) {
-      return `${hours}:${minutes}:${seconds}`;
+      return `${hours}:${minutes}`;
     }
     return `  ${minutes}:${seconds}`;
   };
@@ -192,11 +208,24 @@ const Home = () => {
         onClose={() => Keyboard.dismiss()}
       />
       <View style={styles.clockView}>
-        <Text style={{ color: "white" }}>{formatTime(secs)}</Text>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 24,
+            position: "relative",
+            left: "-5%",
+          }}
+        >
+          {formatTime(secs)}
+        </Text>
       </View>
       <View style={styles.dialContainer}>
         <DialButton
-          title={Math.round(carbonEmit * 100) / 100 + " grams"}
+          title={
+            carbonEmit < 1000
+              ? Math.round(carbonEmit * 100) / 100 + " grams"
+              : Math.round((carbonEmit / 1000) * 100) / 100 + " kg"
+          }
           style={{ border: "none", outline: "none" }}
         />
         <DialButton title={Math.round(distance * 100) / 100 + " miles"} />
@@ -211,37 +240,97 @@ const Home = () => {
           {start ? "Start" : "Stop"}
         </Text>
       </TouchableOpacity>
-      <Modal visible={vis}>
-        <SafeAreaView>
-          <FlatList
-            data={routes.filter((item) => item.waypoints.length > 0)}
-            renderItem={({ item }) => <RenderItem item={item} />}
-            keyExtractor={(item, idx) => idx}
-          />
-        </SafeAreaView>
-      </Modal>
       <TouchableOpacity
         activeOpacity={0.4}
-        style={{
-          position: "absolute",
-          bottom: 90,
-          left: Dimensions.get("window").width * (5 / 6) - 20,
-          width: 125,
-        }}
+        style={styles.historyView}
         onPress={() => {
-          setVis(true);
+          setModalVisible(!modalVisible);
         }}
       >
         <MaterialIcons name="history" size={50} color="white" />
       </TouchableOpacity>
-    </View>
-  );
-};
-
-const RenderItem = ({ item }) => {
-  return (
-    <View>
-      <Text>{item.waypoints.length}</Text>
+      <Modal visible={modalVisible} transparent={true}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <View style={styles.modalView}>
+            <View style={styles.modalTitle}>
+              <Text style={{ fontSize: 24 }}>Past Routes</Text>
+            </View>
+            <View style={styles.modalList}>
+              <FlatList
+                data={routes.filter((x) => x.waypoints.length > 1)}
+                keyExtractor={(item) => item.index}
+                renderItem={({ item }) => {
+                  const dist = item.calcTotalDistance();
+                  const time =
+                    item.waypoints[item.waypoints.length - 1].time -
+                    item.waypoints[0].time;
+                  let h, m, s;
+                  h = Math.floor(time / 1000 / 60 / 60);
+                  m = Math.floor((time / 1000 / 60 / 60 - h) * 60);
+                  s = Math.floor(((time / 1000 / 60 / 60 - h) * 60 - m) * 60);
+                  s < 10 ? (s = `0${s}`) : (s = `${s}`);
+                  m < 10 ? (m = `0${m}`) : (m = `${m}`);
+                  h < 10 ? (h = `0${h}`) : (h = `${h}`);
+                  let bounds = item.getBounds();
+                  const c = item.calcCarbon(dist, carbon);
+                  return (
+                    <View style={{ marginBottom: 5 }}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          margin: 8,
+                          alignItems: "center",
+                        }}
+                      >
+                        <View>
+                          <Text>{`${Math.round(dist * 100) / 100} miles`}</Text>
+                          <Text>{`${
+                            Math.round(item.calcSpeed(dist, time) * 100) / 100
+                          } mph`}</Text>
+                          <Text>{`${Math.round(c * 100) / 100} grams`}</Text>
+                          <Text>{`${h}:${m}:${s}`}</Text>
+                        </View>
+                        <MapView
+                          style={{ height: 100, width: 100 }}
+                          region={{
+                            longitude: bounds.long,
+                            latitude: bounds.lat,
+                            latitudeDelta: bounds.deltaLat,
+                            longitudeDelta: bounds.deltaLong,
+                          }}
+                          customMapStyle={customMapStyles}
+                          provider={PROVIDER_GOOGLE}
+                        >
+                          <Polyline
+                            coordinates={item.toLineCoordinates()}
+                            strokeColor="blue"
+                          />
+                        </MapView>
+                      </View>
+                    </View>
+                  );
+                }}
+              />
+            </View>
+            <View style={{ justifyContent: "flex-end", marginLeft: 10 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(false);
+                }}
+              >
+                <MaterialIcons
+                  name="keyboard-backspace"
+                  size={60}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -269,9 +358,34 @@ const styles = StyleSheet.create({
   },
   clockView: {
     position: "absolute",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
     bottom: 95,
-    height: 30,
-    left: 16,
+    height: 40,
+    left: Dimensions.get("window").width * (1 / 6) - 40,
+  },
+  historyView: {
+    position: "absolute",
+    bottom: 90,
+    left: Dimensions.get("window").width * (5 / 6) - 20,
+    width: 125,
+  },
+  modalView: {
+    width: "90%",
+    height: "90%",
+    backgroundColor: "white",
+    borderRadius: 10,
+  },
+  modalTitle: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  modalList: {
+    flex: 1,
+    marginTop: 20,
+    marginLeft: 20,
   },
 });
 
