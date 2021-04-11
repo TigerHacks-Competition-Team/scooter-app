@@ -8,6 +8,7 @@ import {
   Dimensions,
   FloatingView,
   SafeAreaView,
+  Modal,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
@@ -32,6 +33,7 @@ const Home = () => {
   const [speed, updateSpeed] = useState(0);
   const [carbonEmit, updateCarbonEmit] = useState(0);
   const [startTime, setStartTime] = useState(0);
+  const [routes, setRoutes] = useState([]);
   const [secs, setSecs] = useState(0);
 
   React.useEffect(() => {
@@ -60,6 +62,10 @@ const Home = () => {
   React.useEffect(() => {
     if (!start) {
       updateWayPoints([]);
+    } else if (start) {
+      let way = new WaypointList(waypoints);
+      way.saveList();
+      getLists();
     }
   }, [start]);
 
@@ -67,16 +73,13 @@ const Home = () => {
     if (waypoints.length > 0) {
       let list = new WaypointList(waypoints);
       const dist = list.calcTotalDistance();
+      const time = waypoints[waypoints.length - 1].time - waypoints[0].time;
       updateDistance(dist);
-      console.log(
-        "Time: " + (waypoints[waypoints.length - 1].time - waypoints[0].time)
-      );
-      updateSpeed(
-        list.calcSpeed(
-          dist,
-          waypoints[waypoints.length - 1].time - waypoints[0].time
-        )
-      );
+      console.log("Time: " + time);
+      if (time > 0) {
+        updateSpeed(list.calcSpeed(dist, time));
+      }
+
       updateCarbonEmit(list.calcCarbon(dist, carbon));
     } else {
       updateDistance(0);
@@ -85,6 +88,10 @@ const Home = () => {
     }
   }, [waypoints, carbon]);
 
+  const getLists = async () => {
+    let lists = await WaypointList.getAllLists();
+    setRoutes(lists);
+  };
   const pad = (num) => (num < 10 ? "0" + num : num);
 
   const formatTime = (totalSeconds) => {
@@ -137,7 +144,7 @@ const Home = () => {
         {waypoints.length > 0 && (
           <Polyline
             coordinates={new WaypointList(waypoints).toLineCoordinates()}
-            strokeColor="#000"
+            strokeColor="blue"
           />
         )}
       </MapView>
@@ -212,6 +219,9 @@ const Home = () => {
       >
         <MaterialIcons name="history" size={50} color="white" />
       </TouchableOpacity>
+      <Modal visible={false}>
+        <Text>{JSON.stringify(routes)}</Text>
+      </Modal>
     </View>
   );
 };
