@@ -200,7 +200,7 @@ const Home = () => {
       </View>
       <View style={styles.dialContainer}>
         <DialButton
-          title={Math.round(carbonEmit * 100) / 100 + " grams"}
+          title={carbonEmit < 1000 ? Math.round(carbonEmit * 100) / 100 + " grams" : Math.round((carbonEmit / 1000) * 100) / 100 + " kg"}
           style={{ border: "none", outline: "none" }}
         />
         <DialButton title={Math.round(distance * 100) / 100 + " miles"} />
@@ -290,12 +290,9 @@ const styles = StyleSheet.create({
   },
   clockView: {
     position: "absolute",
-    width: 65,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    borderColor: "white",
-    borderWidth: 1,
     bottom: 95,
     height: 30,
     left: Dimensions.get("window").width * (1 / 6) - 40,
