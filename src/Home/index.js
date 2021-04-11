@@ -179,7 +179,7 @@ const Home = () => {
           {start ? "Start" : "Stop"}
         </Text>
       </TouchableOpacity>
-      <Modal visible>
+      <Modal visible={false}>
         <Text>{JSON.stringify(routes)}</Text>
       </Modal>
     </View>
