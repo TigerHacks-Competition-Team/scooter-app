@@ -69,7 +69,7 @@ const Home = () => {
       updateSpeed(0);
       updateCarbonEmit(0);
     }
-  }, [waypoints]);
+  }, [waypoints, carbon]);
 
   return (
     <View style={{ flex: 1, backgroundColor: "red" }}>
