@@ -39,7 +39,7 @@ class WaypointList {
    * @returns miles per hour
    */
   calcSpeed(distance, time) {
-    let hours = time / 520000000;
+    let hours = time * 0.0000027777777778;
     return distance / hours;
   }
 }

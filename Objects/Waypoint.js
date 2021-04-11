@@ -5,7 +5,7 @@ class Waypoint {
     this.zRot = data.zRot;
     this.xRot = data.xRot;
     this.yRot = data.yRot;
-    this.time = data.time;
+    this.time = data.timestamp;
   }
 
   /**

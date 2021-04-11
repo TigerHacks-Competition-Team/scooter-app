@@ -49,10 +49,20 @@ const Home = () => {
   }, [start]);
 
   React.useEffect(() => {
-    let list = new WaypointList(waypoints);
-    const dist = list.calcTotalDistance();
-    updateDistance(dist);
-    updateSpeed(list.calcSpeed(dist, new Date() - startTime));
+    if (waypoints.length > 0) {
+      let list = new WaypointList(waypoints);
+      const dist = list.calcTotalDistance();
+      updateDistance(dist);
+      console.log(
+        "Time: " + (waypoints[waypoints.length - 1].time - waypoints[0].time)
+      );
+      updateSpeed(
+        list.calcSpeed(
+          dist,
+          waypoints[waypoints.length - 1].time - waypoints[0].time
+        )
+      );
+    }
   }, [waypoints]);
 
   return (
@@ -119,8 +129,8 @@ const Home = () => {
       />
       <View style={styles.dialContainer}>
         <DialButton title="Carbon Impact" />
-        <DialButton title={"Distance: " + Math.round(distance * 100) / 100} />
-        <DialButton title={"Speed: " + Math.round(speed * 100) / 100} />
+        <DialButton title={Math.round(distance * 100) / 100 + " miles"} />
+        <DialButton title={Math.round(speed * 100) / 100 + " mph"} />
       </View>
       <TouchableOpacity
         activeOpacity={0.8}
