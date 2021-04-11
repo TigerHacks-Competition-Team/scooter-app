@@ -121,7 +121,7 @@ const Home = () => {
           backgroundColor: "black",
           position: "absolute",
           top: 40,
-          right: -270,
+          left: Dimensions.get("window").width - 150,
           width: 130,
         }}
         arrowStyle={{ backgroundColor: "white" }}
@@ -131,7 +131,7 @@ const Home = () => {
         dropDownStyle={{
           backgroundColor: "black",
           position: "absolute",
-          right: -270,
+          left: Dimensions.get("window").width - 150,
           width: 130,
         }}
         globalTextStyle={{ color: "white", fontSize: 16 }}
