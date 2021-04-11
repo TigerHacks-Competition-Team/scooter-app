@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   FloatingView,
+  SafeAreaView,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import MapView from "react-native-maps";
@@ -27,11 +28,13 @@ const Home = () => {
   const [carbon, updateCarbon] = useState(vehicles[0].value);
   const [waypoints, updateWayPoints] = useState([]);
   const [distance, updateDistance] = useState(0);
+  const [speed, updateSpeed] = useState(0);
+  const [startTime, setStartTime] = useState(0);
 
   React.useEffect(() => {
     if (!start && location && location.coords) {
       updateWayPoints((prev) => {
-        let pts = new WaypointList(prev ? prev : []);
+        let pts = new WaypointList(prev ? [...prev] : []);
         pts.addWayPoint(new Waypoint(location));
         console.log("adding waypoint");
         return pts.waypoints;
@@ -40,77 +43,98 @@ const Home = () => {
   }, [location, start]);
 
   React.useEffect(() => {
+    if (!start) {
+      setStartTime(new Date());
+    }
+  }, [start]);
+
+  React.useEffect(() => {
     let list = new WaypointList(waypoints);
-    updateDistance(list.calcTotalDistance());
+    const dist = list.calcTotalDistance();
+    updateDistance(dist);
+    updateSpeed(list.calcSpeed(dist, new Date() - startTime));
   }, [waypoints]);
 
   return (
     <View style={{ flex: 1 }}>
-      <View>
-        <MapView
-          style={styles.map}
-          initialRegion={
-            location && location.coords
-              ? {
-                  latitude: location.coords.latitude,
-                  longitude: location.coords.longitude,
-                  latitudeDelta: 0.00922,
-                  longitudeDelta: 0.00421,
-                }
-              : null
-          }
-          region={
-            location && location.coords
-              ? {
-                  latitude: location.coords.latitude,
-                  longitude: location.coords.longitude,
-                  latitudeDelta: 0.00922,
-                  longitudeDelta: 0.00421,
-                }
-              : null
-          }
-        >
-          {location && location.coords && (
-            <Marker
-              coordinate={{
-                latitude:
-                  location && location.coords ? location.coords.latitude : 0,
-                longitude:
-                  location && location.coords ? location.coords.longitude : 0,
-              }}
-            />
-          )}
-        </MapView>
-      </View>
-      <View style={styles.dialContainer}>
-        <DialButton title="Carbon Impact" />
-        <Text>{Math.round(distance * 100) / 100}</Text>
-        <DropDownPicker
-          items={vehicles}
-          defaultValue={carbon}
-          containerStyle={{ width: "33.2%", height: 50 }}
-          style={{ backgroundColor: "black" }}
-          arrowStyle={{ backgroundColor: "white" }}
-          itemStyle={{
-            justifyContent: "flex-start",
-          }}
-          dropDownStyle={{ backgroundColor: "black" }}
-          globalTextStyle={{ color: "white", fontSize: 16 }}
-          onChangeItem={(item) => {
-            updateCarbon(item.value);
-            console.log(carbon);
-          }}
-        />
-      </View>
-      <View style={styles.startBttnView}>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={styles.buttonBox}
-          onPress={() => setStart(!start)}
-        >
-          <Text style={styles.buttonFont}>{start ? "Start" : "Stop"}</Text>
-        </TouchableOpacity>
-      </View>
+      <MapView
+        style={StyleSheet.absoluteFill}
+        initialRegion={
+          location && location.coords
+            ? {
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.00922,
+                longitudeDelta: 0.00421,
+              }
+            : null
+        }
+        region={
+          location && location.coords
+            ? {
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.00922,
+                longitudeDelta: 0.00421,
+              }
+            : null
+        }
+      >
+        {location && location.coords && (
+          <Marker
+            coordinate={{
+              latitude:
+                location && location.coords ? location.coords.latitude : 0,
+              longitude:
+                location && location.coords ? location.coords.longitude : 0,
+            }}
+          />
+        )}
+        <SafeAreaView style={{ flex: 1 }}>
+          <View style={styles.contentView}>
+            <View style={styles.bottomView}>
+              <DropDownPicker
+                items={vehicles}
+                defaultValue={carbon}
+                containerStyle={{ width: "33.2%", height: 50 }}
+                style={{ backgroundColor: "black" }}
+                arrowStyle={{ backgroundColor: "white" }}
+                itemStyle={{
+                  justifyContent: "flex-start",
+                }}
+                dropDownStyle={{ backgroundColor: "black" }}
+                globalTextStyle={{ color: "white", fontSize: 16 }}
+                onChangeItem={(item) => {
+                  updateCarbon(item.value);
+                  console.log(carbon);
+                }}
+              />
+              <View style={styles.dialContainer}>
+                <DialButton title="Carbon Impact" />
+                <DialButton
+                  title={"Distance: " + Math.round(distance * 100) / 100}
+                  value={distance}
+                />
+                <DialButton
+                  title={"Speed: " + Math.round(speed * 100) / 100}
+                  value={speed}
+                />
+              </View>
+              <View style={styles.startBttnView}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={styles.buttonBox}
+                  onPress={() => setStart(!start)}
+                >
+                  <Text style={styles.buttonFont}>
+                    {start ? "Start" : "Stop"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </SafeAreaView>
+      </MapView>
     </View>
   );
 };
@@ -118,36 +142,33 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
-  dialContainer: {
-    position: "absolute",
-    bottom: 95,
-    zIndex: 10,
-    flex: 1,
-    flexDirection: "row",
-    marginHorizontal: 10,
-    alignItems: "flex-end",
-    justifyContent: "space-between",
-    marginBottom: 5,
-  },
+  dialContainer: { flexDirection: "row" },
   buttonBox: {
-    width: 120,
-    height: 50,
-    backgroundColor: "blue",
+    padding: 16,
+    paddingLeft: 32,
+    paddingRight: 32,
+    borderRadius: 5,
     alignItems: "center",
-    justifyContent: "space-around",
-    borderRadius: 10,
+    justifyContent: "center",
+    backgroundColor: "blue",
+    marginTop: 8,
   },
   buttonFont: {
     color: "white",
     fontSize: 20,
   },
-  startBttnView: {
-    position: "absolute",
-    bottom: "5%",
-    left: Dimensions.get("window").width / 2 - 60,
+  startBttnView: {},
+  contentView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+  bottomView: {
+    justifyContent: "center",
+    width: "100%",
+    alignItems: "center",
+    position: "absolute", //Here is the trick
+    bottom: 0, //Here is the trick
+    //alignItems: "flex-end",
   },
 });
