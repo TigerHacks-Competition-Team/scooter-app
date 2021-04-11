@@ -48,6 +48,7 @@ class WaypointList {
     this.waypoints.forEach((waypoint) => {
       coords.push({ latitude: waypoint.lat, longitude: waypoint.long });
     });
+    return coords;
   }
 
   calcCarbon(distance, carbon) {
