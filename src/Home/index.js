@@ -195,7 +195,7 @@ const Home = () => {
         }}
       />
       <View style={styles.clockView}>
-        <Text style={{ color: "white" }}>{formatTime(secs)}</Text>
+        <Text style={{ color: "white", fontSize: 24 }}>{formatTime(secs)}</Text>
       </View>
       <View style={styles.dialContainer}>
         <DialButton
@@ -216,12 +216,7 @@ const Home = () => {
       </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.4}
-        style={{
-          position: "absolute",
-          bottom: 90,
-          left: Dimensions.get("window").width * (5 / 6) - 20,
-          width: 125,
-        }}
+        style={styles.historyView}
         onPress={() => {
           setModalVisible(!modalVisible);
         }}
@@ -232,24 +227,11 @@ const Home = () => {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <View
-            style={{
-              width: "90%",
-              height: "90%",
-              backgroundColor: "white",
-              borderRadius: 10,
-            }}
-          >
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: 10,
-              }}
-            >
+          <View style={styles.modalView}>
+            <View style={styles.modalTitle}>
               <Text style={{ fontSize: 24 }}>Past Routes</Text>
             </View>
-            <View style={{ flex: 1, marginTop: 20, marginLeft: 20 }}>
+            <View style={styles.modalList}>
               <FlatList
                 data={routes}
                 keyExtractor={(item) => item.id}
@@ -301,7 +283,29 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 95,
     height: 30,
-    left: 16,
+    left: Dimensions.get("window").width * (1 / 6) - 40,
+  },
+  historyView: {
+    position: "absolute",
+    bottom: 90,
+    left: Dimensions.get("window").width * (5 / 6) - 20,
+    width: 125,
+  },
+  modalView: {
+    width: "90%",
+    height: "90%",
+    backgroundColor: "white",
+    borderRadius: 10,
+  },
+  modalTitle: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  modalList: {
+    flex: 1,
+    marginTop: 20,
+    marginLeft: 20,
   },
 });
 
