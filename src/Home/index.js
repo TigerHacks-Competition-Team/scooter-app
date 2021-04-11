@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getLocation } from "../../Hooks/index";
 import {
   View,
@@ -16,9 +16,9 @@ import WaypointList from "../../Objects/WaypointList";
 import Waypoint from "../../Objects/Waypoint";
 
 const vehicles = [
-  { label: "Car", value: 200 },
-  { label: "Scooter", value: 100 },
-  { label: "Walking", value: 3 },
+  { label: "Car", value: 0.00411 },
+  { label: "Scooter", value: 0.002 },
+  { label: "Walking", value: 0.00014 },
 ];
 
 const Home = () => {
@@ -27,6 +27,12 @@ const Home = () => {
   const [carbon, updateCarbon] = useState(vehicles[0].value);
   const [waypoints, updateWayPoints] = useState([]);
   const [distance, updateDistance] = useState(0);
+  const [carbonEmmitted, setcarbonEmiited] = useState(0);
+
+  useEffect(() => {
+    setcarbonEmiited(distance * carbon);
+    console.log("Carbon Emitted", carbonEmmitted);
+  }, [distance]);
 
   React.useEffect(() => {
     if (!start && location && location.coords) {
