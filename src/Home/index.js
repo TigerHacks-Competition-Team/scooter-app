@@ -107,7 +107,7 @@ const Home = () => {
     const minutes = pad(Math.floor(totalSeconds / 60));
     const seconds = pad(totalSeconds % 60);
     if (totalSeconds >= 3600) {
-      return `${hours}:${minutes}:${seconds}`;
+      return `${hours}:${minutes}`;
     }
     return `  ${minutes}:${seconds}`;
   };
@@ -196,7 +196,16 @@ const Home = () => {
         }}
       />
       <View style={styles.clockView}>
-        <Text style={{ color: "white", fontSize: 24 }}>{formatTime(secs)}</Text>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 24,
+            position: "relative",
+            left: "-5%",
+          }}
+        >
+          {formatTime(secs)}
+        </Text>
       </View>
       <View style={styles.dialContainer}>
         <DialButton
@@ -294,7 +303,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     bottom: 95,
-    height: 30,
+    height: 40,
     left: Dimensions.get("window").width * (1 / 6) - 40,
   },
   historyView: {
