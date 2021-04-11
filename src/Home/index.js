@@ -56,7 +56,7 @@ const Home = () => {
   }, [waypoints]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "red" }}>
       <MapView
         style={StyleSheet.absoluteFill}
         initialRegion={
@@ -124,7 +124,7 @@ const Home = () => {
                 <TouchableOpacity
                   activeOpacity={0.8}
                   style={styles.buttonBox}
-                  onPress={() => setStart(!start)}
+                  onPress={() => setStart((prev) => !prev)}
                 >
                   <Text style={styles.buttonFont}>
                     {start ? "Start" : "Stop"}
@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute", //Here is the trick
     bottom: 0, //Here is the trick
+    backgroundColor: "blue",
     //alignItems: "flex-end",
   },
 });
