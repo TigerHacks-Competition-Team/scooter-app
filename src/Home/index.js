@@ -21,7 +21,8 @@ import { FlatList } from "react-native-gesture-handler";
 
 const vehicles = [
   { label: "Car", value: 204 },
-  { label: "eScooter", value: 124 },
+  { label: "Rental eScooter", value: 124 },
+  { label: "Electric Skateboard", value: 3 },
   { label: "Motorcycle", value: 86 },
   { label: "Electric Car", value: 78 },
   { label: "Average Bus", value: 180 },
@@ -289,6 +290,12 @@ const styles = StyleSheet.create({
   },
   clockView: {
     position: "absolute",
+    width: 65,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "white",
+    borderWidth: 1,
     bottom: 95,
     height: 30,
     left: Dimensions.get("window").width * (1 / 6) - 40,
