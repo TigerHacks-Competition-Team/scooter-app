@@ -1,3 +1,5 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 class WaypointList {
   constructor(waypoints) {
     this.waypoints = waypoints ? waypoints : [];
@@ -53,6 +55,43 @@ class WaypointList {
 
   calcCarbon(distance, carbon) {
     return 1.60934 * distance * carbon;
+  }
+
+  static getAllLists() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let routes = await AsyncStorage.getItem("routes");
+        if (routes) {
+          let routesParsed = JSON.parse(routes);
+          let convertLists = routesParsed.map((item) => new WaypointList(item));
+          resolve(convertLists);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  }
+
+  saveList() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let routes = await AsyncStorage.getItem("routes");
+        if (routes) {
+          let routesParsed = JSON.parse(routes);
+          routesParsed.push(this.waypoints);
+          let routesString = JSON.stringify(routesParsed);
+          await AsyncStorage.setItem("routes", routesString);
+          resolve(routesParsed);
+        } else {
+          let routesParsed = [this.waypoints];
+          let routesString = JSON.stringify(routesParsed);
+          await AsyncStorage.setItem("routes", routesString);
+          resolve(routesParsed);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    });
   }
 }
 
