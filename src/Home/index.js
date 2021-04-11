@@ -234,8 +234,16 @@ const Home = () => {
             <View style={styles.modalList}>
               <FlatList
                 data={routes}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => <Text>{JSON.stringify(item)}</Text>}
+                keyExtractor={(item) => item.index}
+                renderItem={({ item }) => {
+                  item.lat ? (
+                    <View style={{ marginBottom: 5 }}>
+                      <Text>{`Lattitude ${item.lat}`}</Text>
+                      <Text>{`Longitude ${item.long}`}</Text>
+                      <Text>{`Time ${item.time}`}</Text>
+                    </View>
+                  ) : null;
+                }}
               />
             </View>
             <View style={{ justifyContent: "flex-end", marginLeft: 10 }}>
