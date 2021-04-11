@@ -10,7 +10,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import MapView from "react-native-maps";
+import MapView, { Polyline } from "react-native-maps";
 import DialButton from "../../components/DialButton";
 import { Marker } from "react-native-maps";
 import WaypointList from "../../Objects/WaypointList";
@@ -29,6 +29,7 @@ const Home = () => {
   const [waypoints, updateWayPoints] = useState([]);
   const [distance, updateDistance] = useState(0);
   const [speed, updateSpeed] = useState(0);
+  const [carbonEmit, updateCarbonEmit] = useState(0);
   const [startTime, setStartTime] = useState(0);
 
   React.useEffect(() => {
@@ -44,7 +45,7 @@ const Home = () => {
 
   React.useEffect(() => {
     if (!start) {
-      setStartTime(new Date());
+      updateWayPoints([]);
     }
   }, [start]);
 
@@ -62,6 +63,11 @@ const Home = () => {
           waypoints[waypoints.length - 1].time - waypoints[0].time
         )
       );
+      updateCarbonEmit(list.calcCarbon(dist, carbon));
+    } else {
+      updateDistance(0);
+      updateSpeed(0);
+      updateCarbonEmit(0);
     }
   }, [waypoints]);
 
@@ -89,17 +95,24 @@ const Home = () => {
               }
             : null
         }
-      />
-      {location && location.coords && (
-        <Marker
-          coordinate={{
-            latitude:
-              location && location.coords ? location.coords.latitude : 0,
-            longitude:
-              location && location.coords ? location.coords.longitude : 0,
-          }}
-        />
-      )}
+      >
+        {location && location.coords && (
+          <Marker
+            coordinate={{
+              latitude:
+                location && location.coords ? location.coords.latitude : 0,
+              longitude:
+                location && location.coords ? location.coords.longitude : 0,
+            }}
+          />
+        )}
+        {waypoints.length > 0 && (
+          <Polyline
+            coordinates={new WaypointList(waypoints).toLineCoordinates()}
+            strokeColor="#000"
+          />
+        )}
+      </MapView>
       <DropDownPicker
         items={vehicles}
         defaultValue={carbon}
@@ -128,7 +141,7 @@ const Home = () => {
         }}
       />
       <View style={styles.dialContainer}>
-        <DialButton title="Carbon Impact" />
+        <DialButton title={Math.round(carbonEmit * 100) / 100 + " grams"} />
         <DialButton title={Math.round(distance * 100) / 100 + " miles"} />
         <DialButton title={Math.round(speed * 100) / 100 + " mph"} />
       </View>
@@ -165,5 +178,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
+  },
+  clockView: {
+    position: "absolute",
+    bottom: 95,
+    height: 30,
+    left: 16,
   },
 });

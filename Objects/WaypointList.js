@@ -42,6 +42,17 @@ class WaypointList {
     let hours = time * 0.0000027777777778;
     return distance / hours;
   }
+
+  toLineCoordinates() {
+    let coords = [];
+    this.waypoints.forEach((waypoint) => {
+      coords.push({ latitude: waypoint.lat, longitude: waypoint.long });
+    });
+  }
+
+  calcCarbon(distance, carbon) {
+    return 1.60934 * distance * carbon;
+  }
 }
 
 export default WaypointList;
