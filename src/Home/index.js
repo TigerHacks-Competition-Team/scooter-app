@@ -9,6 +9,7 @@ import {
   FloatingView,
   SafeAreaView,
   Modal,
+  Keyboard,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
@@ -16,6 +17,7 @@ import DialButton from "../../components/DialButton";
 import { Marker } from "react-native-maps";
 import WaypointList from "../../Objects/WaypointList";
 import Waypoint from "../../Objects/Waypoint";
+import { FlatList } from "react-native-gesture-handler";
 
 const vehicles = [
   { label: "Car", value: 200 },
@@ -61,7 +63,7 @@ const Home = () => {
   React.useEffect(() => {
     if (!start) {
       updateWayPoints([]);
-    } else if (start) {
+    } else if (start && waypoints.length > 1) {
       let way = new WaypointList(waypoints);
       way.saveList();
       getLists();
@@ -185,6 +187,7 @@ const Home = () => {
           updateCarbon(item.value);
           console.log(carbon);
         }}
+        onClose={() => Keyboard.dismiss()}
       />
       <View style={styles.clockView}>
         <Text style={{ color: "white" }}>{formatTime(secs)}</Text>
@@ -206,9 +209,23 @@ const Home = () => {
           {start ? "Start" : "Stop"}
         </Text>
       </TouchableOpacity>
-      <Modal visible={false}>
-        <Text>{JSON.stringify(routes)}</Text>
+      <Modal visible>
+        <SafeAreaView>
+          <FlatList
+            data={routes.filter((item) => item.waypoints.length > 0)}
+            renderItem={renderItem}
+            keyExtractor={(item, idx) => idx}
+          />
+        </SafeAreaView>
       </Modal>
+    </View>
+  );
+};
+
+const renderItem = ({ item }) => {
+  return (
+    <View>
+      <Text>{item.waypoints.length}</Text>
     </View>
   );
 };
